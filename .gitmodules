@@ -4,3 +4,6 @@
 [submodule "libs/sockpp"]
 	path = libs/sockpp
 	url = https://github.com/JaanDev/sockpp.git
+[submodule "libs/nbtpp"]
+	path = libs/nbtpp
+	url = https://github.com/JaanDev/nbtpp.git

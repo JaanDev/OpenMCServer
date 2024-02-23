@@ -10,11 +10,15 @@ if (NOT ${spdlog_FOUND})
     add_subdirectory(libs/spdlog)
 endif()
 add_subdirectory(libs/sockpp)
+add_subdirectory(libs/nbtpp)
 
-file(GLOB SOURCES
+file(GLOB_RECURSE SOURCES
     src/*.cpp
 )
 
 add_executable(${PROJECT_NAME} ${SOURCES})
-target_include_directories(${PROJECT_NAME} PRIVATE src)
-target_link_libraries(${PROJECT_NAME} sockpp spdlog::spdlog)
+target_include_directories(${PROJECT_NAME} PRIVATE
+    src
+    src/world
+)
+target_link_libraries(${PROJECT_NAME} sockpp spdlog::spdlog nbtpp)

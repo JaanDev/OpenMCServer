@@ -1,43 +1,48 @@
 #pragma once
 #include <cstdint>
 #include <cstddef>
-
+#include <bit>
+#include <span>
+#include <string>
+#include <algorithm>
 #include <spdlog/spdlog.h>
 
-class StreamReader {
-  public:
-    StreamReader(uint8_t* data, size_t len);
-    template <typename T>
-    StreamReader& operator>>(T& other) {
-        auto size = sizeof(other);
-        if (m_len < size) {
-            spdlog::error("Failed to read {} bytes from the buffer (only {} left)!", size, m_len);
+namespace nbt {
+    class StreamReader {
+      public:
+        StreamReader(std::span<uint8_t> data);
+
+        template <typename T>
+        StreamReader& operator>>(T& other) {
+            constexpr auto size = sizeof(other);
+            if (m_len < size) {
+                spdlog::error("[nbtpp] Failed to read {} bytes from the buffer (only {} left)!", size, m_len);
+                return *this;
+            }
+
+            other = *((T*)m_data);
+            if constexpr (size > 1 && std::endian::native == std::endian::little)
+                std::reverse((uint8_t*)&other, (uint8_t*)&other + size);
+            m_len -= size;
+            m_data += size;
+
             return *this;
         }
 
-        other = *((T*)m_data);
-        if (size > 1)
-            std::reverse((uint8_t*)&other, (uint8_t*)&other + size);
-        m_len -= size;
-        m_data += size;
+        template <typename T>
+        T read() {
+            T val;
+            *this >> val;
+            return val;
+        }
 
-        return *this;
-    }
+        inline size_t len() const { return m_len; }
+        void read(std::span<uint8_t> data);
+        std::string readStr();
+        void skip(size_t len);
 
-    template <typename T>
-    T read() {
-        T val;
-        *this >> val;
-        return val;
-    }
-
-    inline size_t len() { return m_len; }
-    void read(uint8_t* buf, size_t len);
-    void skip(size_t len);
-
-    std::string readStr();
-
-  private:
-    uint8_t* m_data;
-    size_t m_len;
-};
+      private:
+        uint8_t* m_data;
+        size_t m_len;
+    };
+} // namespace nbt

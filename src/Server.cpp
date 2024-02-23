@@ -13,9 +13,9 @@ Server& Server::get() {
     return inst;
 }
 
-Server::Server() : m_running(true) {
-    spdlog::set_pattern("[%H:%M:%S] [%L] %v");
+Server::Server() : m_running(true) {}
 
+void Server::run() {
     sockpp::initialize();
 
     sockpp::error_code ec;
@@ -27,27 +27,29 @@ Server::Server() : m_running(true) {
 
     info("Started on {}", m_acceptor.address().to_string());
 
-    std::thread(&Server::acceptThread, this).detach();
+    info("Loading spawn area...");
+
+    // std::thread(&Server::acceptThread, this).detach();
     runLoop();
 }
 
 void Server::acceptThread() {
-    while (m_running) {
-        sockpp::inet_address peer;
+    // while (m_running) {
+    //     sockpp::inet_address peer;
 
-        // Accept a new client connection
-        if (auto res = m_acceptor.accept(&peer); !res) {
-            error("Failed to accept an incoming connection {}. Error: {}", peer.to_string(), res.error_message());
-        } else {
-            info("Received a new connection at {}", peer.to_string());
+    //     // Accept a new client connection
+    //     if (auto res = m_acceptor.accept(&peer); !res) {
+    //         error("Failed to accept an incoming connection {}. Error: {}", peer.to_string(), res.error_message());
+    //     } else {
+    //         info("Received a new connection at {}", peer.to_string());
 
-            sockpp::tcp_socket sock = res.release();
-            sock.set_non_blocking();
+    //         sockpp::tcp_socket sock = res.release();
+    //         sock.set_non_blocking();
 
-            std::lock_guard<std::mutex> guard(m_clientsMutex);
-            m_clients.push_back(Client(std::move(sock)));
-        }
-    }
+    //         std::lock_guard<std::mutex> guard(m_clientsMutex);
+    //         m_clients.push_back(Client(std::move(sock)));
+    //     }
+    // }
 }
 
 void Server::runLoop() {
@@ -81,19 +83,10 @@ void Server::runLoop() {
     }
 }
 
+void Server::loadSpawnArea() {
+
+}
+
 void Server::update() {
-    std::lock_guard<std::mutex> guard(m_clientsMutex);
-    for (auto it = m_clients.begin(); it < m_clients.end(); it++) {
-        auto& client = *it;
-        client.update();
-
-        if (!client.isConnected()) {
-            info("Disconnecting {}", client.getSocket().address().to_string());
-            client.getSocket().close();
-            m_clients.erase(it);
-            continue;
-        }
-
-        it++;
-    }
+    
 }

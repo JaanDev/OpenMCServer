@@ -38,3 +38,19 @@ enum class PacketID : uint8_t {
     ComplexEntity = 59,
     KickDisconnect = 255
 };
+
+struct ChunkPos {
+    int x;
+    int z;
+
+    bool operator==(const ChunkPos& other) const = default;
+};
+
+template <>
+struct std::hash<ChunkPos> {
+    size_t operator()(const ChunkPos& val) const noexcept {
+        using std::hash;
+
+        return hash<int>()(val.x) ^ (hash<int>()(val.z) << 1);
+    }
+};
