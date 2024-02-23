@@ -1,0 +1,6 @@
+[submodule "libs/spdlog"]
+	path = libs/spdlog
+	url = https://github.com/gabime/spdlog.git
+[submodule "libs/sockpp"]
+	path = libs/sockpp
+	url = https://github.com/JaanDev/sockpp.git
