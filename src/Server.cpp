@@ -29,14 +29,16 @@ void Server::run() {
 
     info("Started on {}", m_acceptor.address().to_string());
 
-    info("Loading world \"world\""); // forced for now
-    World::get().loadWorld("world");
+    // auto worldName = "/mnt/C/Dev/MCRewrite/server/world";
+    auto worldName = "world";
+    info("Loading world \"{}\"", worldName); // forced for now
+    World::get().loadWorld(worldName);
     
-    info("Loading spawn area...");
-    loadSpawnArea();
+    // info("Loading spawn area...");
+    // loadSpawnArea();
     
-    // std::thread(&Server::acceptThread, this).detach();
-    runLoop();
+    // // std::thread(&Server::acceptThread, this).detach();
+    // runLoop();
 }
 
 void Server::acceptThread() {

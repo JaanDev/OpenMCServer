@@ -39,6 +39,80 @@ enum class PacketID : uint8_t {
     KickDisconnect = 255
 };
 
+enum class BlockID : uint8_t {
+    Air = 0,
+    Stone,
+    Grass,
+    Dirt,
+    Cobblestone,
+    Planks,
+    Sapling,
+    Bedrock,
+    WaterStill,
+    WaterMoving,
+    LavaStill,
+    LavaMoving,
+    Sand,
+    Gravel,
+    OreGold,
+    OreIron,
+    OreCoal,
+    Wood,
+    Leaves,
+    Sponge,
+    Glass,
+    Cloth,
+    PlantYellow,
+    PlantRed,
+    MushroomBrown,
+    MushroomRed,
+    BlockGold,
+    BlockSteel,
+    StairDouble,
+    StairSingle,
+    Brick,
+    Tnt,
+    Bookshelf,
+    CobblestoneMossy,
+    Obsidian,
+    TorchWood,
+    Fire,
+    MobSpawner,
+    StairCompact_wood,
+    Crate,
+    RedstoneWire,
+    OreDiamond,
+    BlockDiamond,
+    Workbench,
+    Crops,
+    TilledField,
+    StoneOvenIdle,
+    StoneOvenActive,
+    PressurePlateWoodActive,
+    DoorWood,
+    Ladder,
+    MinecartTrack,
+    StairCompactStone,
+    PressurePlateWoodIdle,
+    Lever,
+    PressurePlateStone,
+    DoorSteel,
+    PressurePlateWood,
+    OreRedstone,
+    OreRedstoneGlowing,
+    TorchRedstoneIdle,
+    TorchRedstoneActive,
+    Button,
+    Snow,
+    Ice,
+    BlockSnow,
+    Cactus,
+    BlockClay,
+    Reed,
+    Jukebox,
+    Fence
+};
+
 struct ChunkPos {
     int x;
     int z;
@@ -62,5 +136,13 @@ struct Vec3 {
     T z;
 };
 
+template <typename T>
+struct Vec2 {
+    T x;
+    T y;
+};
+
 using Vec3f = Vec3<float>;
 using Vec3i = Vec3<int>;
+using Vec2f = Vec2<float>;
+using Vec2i = Vec2<int>;
