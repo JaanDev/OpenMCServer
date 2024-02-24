@@ -54,3 +54,13 @@ struct std::hash<ChunkPos> {
         return hash<int>()(val.x) ^ (hash<int>()(val.z) << 1);
     }
 };
+
+template <typename T>
+struct Vec3 {
+    T x;
+    T y;
+    T z;
+};
+
+using Vec3f = Vec3<float>;
+using Vec3i = Vec3<int>;

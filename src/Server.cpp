@@ -2,6 +2,8 @@
 
 #include "utils.hpp"
 #include "StreamReader.hpp"
+#include "World.hpp"
+
 #include <thread>
 #include <chrono>
 #include <spdlog/spdlog.h>
@@ -27,8 +29,12 @@ void Server::run() {
 
     info("Started on {}", m_acceptor.address().to_string());
 
+    info("Loading world \"world\""); // forced for now
+    World::get().loadWorld("world");
+    
     info("Loading spawn area...");
-
+    loadSpawnArea();
+    
     // std::thread(&Server::acceptThread, this).detach();
     runLoop();
 }
@@ -84,7 +90,13 @@ void Server::runLoop() {
 }
 
 void Server::loadSpawnArea() {
-
+    auto distance = 5;
+    auto& w = World::get();
+    for (auto x = -distance; x < distance; x++) {
+        for (auto z = -distance; z < distance; z++) {
+            w.getChunk({x, z});
+        }
+    }
 }
 
 void Server::update() {
